@@ -34,7 +34,7 @@ const SongItem = ({ song, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="group flex items-center justify-between p-3 md:p-4 hover:bg-neutral-50 rounded-2xl transition-all cursor-pointer border border-transparent hover:border-neutral-100"
+      className="group flex items-center justify-between p-1.5 md:p-2 hover:bg-neutral-50 rounded-2xl transition-all cursor-pointer border border-transparent hover:border-neutral-100"
     >
       <div className="flex items-center gap-x-4 md:gap-x-6">
         {/* Simple Play Indicator */}
@@ -47,7 +47,7 @@ const SongItem = ({ song, onClick }) => {
         </div>
 
         {/* Music Square */}
-        <div className="h-10 w-10 md:h-12 md:w-12 bg-neutral-100 rounded-xl flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all border border-transparent group-hover:border-neutral-100">
+        <div className="h-10 w-10 md:h-11 md:w-11 bg-neutral-100 rounded-xl flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all border border-transparent group-hover:border-neutral-100">
           <Music className="text-neutral-400" size={18} />
         </div>
 
@@ -65,9 +65,8 @@ const SongItem = ({ song, onClick }) => {
 
       <button
         onClick={toggleSave}
-        className={`pr-2 md:pr-4 transition-transform active:scale-90 ${
-          isSaved ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-        }`}
+        className={`pr-2 md:pr-4 transition-transform active:scale-90 ${isSaved ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+          }`}
       >
         <Heart
           size={20}

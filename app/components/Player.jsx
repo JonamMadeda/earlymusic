@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { usePlayer } from "../context/PlayerContext"; // Added Context
 import {
@@ -18,7 +18,6 @@ import { getCachedAudioUrl, cacheAudioFile } from "@/lib/cacheUtils";
 
 const Player = () => {
   const audioRef = useRef(null);
-  // Using global context instead of props to ensure the queue is always correct
   const {
     activeSong: song,
     queue: songs,
@@ -35,33 +34,6 @@ const Player = () => {
   const [audioUrl, setAudioUrl] = useState(null);
 
   const currentIndex = (songs || []).findIndex((s) => s.id === song?.id);
-
-  useEffect(() => {
-    if (song) {
-      const loadAudio = async () => {
-        const { data } = supabase.storage
-          .from("songs")
-          .getPublicUrl(song.song_path);
-
-        const publicUrl = data.publicUrl;
-
-        // Check cache first
-        const cachedUrl = await getCachedAudioUrl(publicUrl);
-        if (cachedUrl) {
-          setAudioUrl(cachedUrl);
-        } else {
-          setAudioUrl(publicUrl);
-          // Gently cache it for next time
-          cacheAudioFile(publicUrl);
-        }
-
-        setIsPlaying(true);
-        setCurrentTime(0);
-      };
-
-      loadAudio();
-    }
-  }, [song]);
 
   // Sync isPlaying state with audio element
   useEffect(() => {
@@ -80,7 +52,7 @@ const Player = () => {
     }
   }, [isPlaying, audioUrl]);
 
-  const onPlayNext = () => {
+  const onPlayNext = useCallback(() => {
     if (!songs || songs.length === 0) return;
 
     if (isShuffle) {
@@ -90,22 +62,75 @@ const Player = () => {
           nextIndex = Math.floor(Math.random() * songs.length);
         }
       }
-      onSongSelect(songs[nextIndex], songs); // Pass queue back to keep context
+      onSongSelect(songs[nextIndex], songs);
     } else {
       const nextIndex = (currentIndex + 1) % songs.length;
       onSongSelect(songs[nextIndex], songs);
     }
-  };
+  }, [songs, isShuffle, currentIndex, onSongSelect]);
 
-  const onPlayPrevious = () => {
+  const onPlayPrevious = useCallback(() => {
     if (!songs || songs.length === 0) return;
     const prevIndex = currentIndex <= 0 ? songs.length - 1 : currentIndex - 1;
     onSongSelect(songs[prevIndex], songs);
-  };
+  }, [songs, currentIndex, onSongSelect]);
 
-  const togglePlay = () => {
+  const togglePlay = useCallback(() => {
     setIsPlaying((prev) => !prev);
-  };
+  }, []);
+
+  // MediaSession API integration
+  useEffect(() => {
+    if (typeof window === "undefined" || !("mediaSession" in navigator) || !song) return;
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: song.title,
+      artist: song.author,
+      album: "Early Music",
+      artwork: [
+        { src: "/favicon.ico", sizes: "192x192", type: "image/png" },
+      ],
+    });
+
+    navigator.mediaSession.setActionHandler("play", togglePlay);
+    navigator.mediaSession.setActionHandler("pause", togglePlay);
+    navigator.mediaSession.setActionHandler("previoustrack", onPlayPrevious);
+    navigator.mediaSession.setActionHandler("nexttrack", onPlayNext);
+
+    return () => {
+      navigator.mediaSession.setActionHandler("play", null);
+      navigator.mediaSession.setActionHandler("pause", null);
+      navigator.mediaSession.setActionHandler("previoustrack", null);
+      navigator.mediaSession.setActionHandler("nexttrack", null);
+    };
+  }, [song, togglePlay, onPlayNext, onPlayPrevious]);
+
+  useEffect(() => {
+    if (song) {
+      const loadAudio = async () => {
+        // Construct URL synchronously to avoid unnecessary await if possible
+        const { data } = supabase.storage
+          .from("songs")
+          .getPublicUrl(song.song_path);
+
+        const publicUrl = data.publicUrl;
+
+        // Check cache
+        const cachedUrl = await getCachedAudioUrl(publicUrl);
+        if (cachedUrl) {
+          setAudioUrl(cachedUrl);
+        } else {
+          setAudioUrl(publicUrl);
+          cacheAudioFile(publicUrl);
+        }
+
+        setIsPlaying(true);
+        setCurrentTime(0);
+      };
+
+      loadAudio();
+    }
+  }, [song]);
 
   const toggleMute = () => {
     const newMuted = !isMuted;
@@ -173,7 +198,7 @@ const Player = () => {
                 onClick={() => {
                   const newState = !isShuffle;
                   setIsShuffle(newState);
-                  if (newState) setIsLooping(false); // Mutually exclusive
+                  if (newState) setIsLooping(false);
                 }}
                 className={`transition-colors active:scale-90 ${isShuffle
                   ? "text-red-600"
@@ -216,7 +241,7 @@ const Player = () => {
                 onClick={() => {
                   const newState = !isLooping;
                   setIsLooping(newState);
-                  if (newState) setIsShuffle(false); // Mutually exclusive
+                  if (newState) setIsShuffle(false);
                 }}
                 className={`transition-colors active:scale-90 ${isLooping
                   ? "text-red-600"

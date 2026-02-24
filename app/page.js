@@ -94,16 +94,16 @@ export default function Home() {
     <main className="min-h-[90vh] bg-white px-6 py-8 pb-40 relative">
       <div className="max-w-5xl mx-auto">
         {/* Consolidated Filters */}
-        <div className="flex items-center gap-x-4 mb-12 overflow-x-auto no-scrollbar py-2">
+        <div className="flex items-center gap-2 md:gap-4 mb-8 md:mb-12 overflow-x-auto no-scrollbar py-2">
           {/* Time Picker */}
-          <div className="flex items-center gap-x-3 bg-neutral-50 px-4 py-2.5 rounded-2xl border border-neutral-100/50">
-            <span className="text-[11px] font-medium text-neutral-400">
+          <div className="flex items-center gap-x-2 md:gap-x-3 bg-neutral-50 px-3 py-2 md:px-4 md:py-2.5 rounded-2xl border border-neutral-100/50 flex-shrink-0">
+            <span className="text-[10px] md:text-[11px] font-medium text-neutral-400">
               Time
             </span>
             <select
               value={activeFilter}
               onChange={(e) => setActiveFilter(e.target.value)}
-              className="bg-transparent text-[13px] font-bold text-neutral-900 outline-none cursor-pointer pr-2"
+              className="bg-transparent text-[12px] md:text-[13px] font-bold text-neutral-900 outline-none cursor-pointer pr-1"
             >
               {filters.map((f) => (
                 <option key={f.label} value={f.label}>
@@ -114,14 +114,14 @@ export default function Home() {
           </div>
 
           {/* Category Picker */}
-          <div className="flex items-center gap-x-3 bg-neutral-50 px-4 py-2.5 rounded-2xl border border-neutral-100/50">
-            <span className="text-[11px] font-medium text-neutral-400">
+          <div className="flex items-center gap-x-2 md:gap-x-3 bg-neutral-50 px-3 py-2 md:px-4 md:py-2.5 rounded-2xl border border-neutral-100/50 flex-shrink-0">
+            <span className="text-[10px] md:text-[11px] font-medium text-neutral-400">
               Type
             </span>
             <select
               value={activeCategory}
               onChange={(e) => setActiveCategory(e.target.value)}
-              className="bg-transparent text-[13px] font-bold text-neutral-900 outline-none cursor-pointer pr-2"
+              className="bg-transparent text-[12px] md:text-[13px] font-bold text-neutral-900 outline-none cursor-pointer pr-1"
             >
               {["All", "Worship", "Praise"].map((cat) => (
                 <option key={cat} value={cat}>
@@ -131,14 +131,14 @@ export default function Home() {
             </select>
           </div>
 
-          {/* Active Status Indicators (Optional/Minimal) */}
+          {/* Active Status Indicators */}
           {(activeFilter !== "All" || activeCategory !== "All") && (
             <button
               onClick={() => {
                 setActiveFilter("All");
                 setActiveCategory("All");
               }}
-              className="ml-auto text-red-600 text-[11px] font-bold uppercase tracking-widest hover:underline"
+              className="ml-auto flex-shrink-0 text-red-600 text-[10px] md:text-[11px] font-bold uppercase tracking-widest hover:underline"
             >
               Reset
             </button>
@@ -148,16 +148,16 @@ export default function Home() {
         {isLoading ? (
           <Loader />
         ) : (
-          <div className="flex flex-col gap-y-10">
+          <div className="flex flex-col gap-y-6">
             {alphabet.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-neutral-400">
                 <p className="text-sm font-medium">No songs found for this timeframe</p>
               </div>
             ) : (
               alphabet.map((letter) => (
-                <div key={letter} className="flex flex-col gap-y-4">
-                  <div className="flex items-center gap-x-4 border-b border-neutral-50 pb-3 px-2">
-                    <h2 className="text-3xl font-semibold text-red-600 tracking-tight">
+                <div key={letter} className="flex flex-col gap-y-2">
+                  <div className="flex items-center gap-x-4 border-b border-neutral-50 pb-2 px-2">
+                    <h2 className="text-3xl font-semibold text-neutral-900 tracking-tight">
                       {letter}
                     </h2>
                   </div>
