@@ -29,6 +29,7 @@ export default function AdminDashboard() {
   const [editingId, setEditingId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
   const [editAuthor, setEditAuthor] = useState("");
+  const [editCategory, setEditCategory] = useState("Worship");
 
   const router = useRouter();
   const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
@@ -74,26 +75,39 @@ export default function AdminDashboard() {
     setEditingId(song.id);
     setEditTitle(song.title);
     setEditAuthor(song.author);
+    setEditCategory(song.category || "Worship");
   };
 
   const cancelEdit = () => {
     setEditingId(null);
     setEditTitle("");
     setEditAuthor("");
+    setEditCategory("Worship");
   };
 
   const handleUpdate = async (id) => {
     try {
       const { error } = await supabase
         .from("songs")
-        .update({ title: editTitle, author: editAuthor })
+        .update({
+          title: editTitle,
+          author: editAuthor,
+          category: editCategory,
+        })
         .eq("id", id);
 
       if (error) throw error;
 
       setAllSongs((prev) =>
         prev.map((s) =>
-          s.id === id ? { ...s, title: editTitle, author: editAuthor } : s
+          s.id === id
+            ? {
+              ...s,
+              title: editTitle,
+              author: editAuthor,
+              category: editCategory,
+            }
+            : s
         )
       );
       cancelEdit();
@@ -223,6 +237,14 @@ export default function AdminDashboard() {
                             onChange={(e) => setEditAuthor(e.target.value)}
                             className="w-full md:flex-1 bg-neutral-100 border-none rounded-xl px-4 py-2 text-[13px] font-medium outline-none focus:ring-2 ring-red-600/20"
                           />
+                          <select
+                            value={editCategory}
+                            onChange={(e) => setEditCategory(e.target.value)}
+                            className="bg-neutral-100 border-none rounded-xl px-4 py-2 text-[13px] font-semibold outline-none focus:ring-2 ring-red-600/20 appearance-none"
+                          >
+                            <option value="Worship">Worship</option>
+                            <option value="Praise">Praise</option>
+                          </select>
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => handleUpdate(song.id)}
@@ -252,6 +274,19 @@ export default function AdminDashboard() {
                                 {song.author}
                               </p>
                             </div>
+                            {(song.category || "Worship") && (
+                              <span
+                                className={`
+                                  ml-2 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
+                                  ${song.category === "Praise"
+                                    ? "bg-red-50 text-red-600"
+                                    : "bg-neutral-100 text-neutral-400"
+                                  }
+                                `}
+                              >
+                                {song.category || "Worship"}
+                              </span>
+                            )}
                           </div>
 
                           <div className="flex items-center gap-2 md:opacity-0 md:group-hover:opacity-100 transition-opacity">

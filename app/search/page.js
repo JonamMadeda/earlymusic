@@ -45,7 +45,7 @@ export default function SearchPage() {
             placeholder="Search by track or artist..."
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
-            className="w-full bg-neutral-50 border border-neutral-100 py-5 pl-14 pr-8 rounded-2xl text-[15px] font-medium placeholder:text-neutral-300 focus:outline-none focus:border-red-600 focus:bg-white transition-all tracking-tight"
+            className="w-full bg-neutral-50 border border-neutral-100 py-4 pl-14 pr-8 rounded-2xl text-[15px] font-medium placeholder:text-neutral-300 focus:outline-none focus:border-red-600 focus:bg-white transition-all tracking-tight"
           />
         </div>
 
@@ -55,11 +55,10 @@ export default function SearchPage() {
           <div className="flex flex-col gap-y-12">
             {alphabet.map((letter) => (
               <div key={letter} className="flex flex-col gap-y-4">
-                <div className="flex items-center gap-x-4 px-2">
+                <div className="flex items-center gap-x-4 border-b border-neutral-50 pb-3 px-2">
                   <h2 className="text-3xl font-semibold text-red-600 tracking-tight">
                     {letter}
                   </h2>
-                  <div className="h-[1px] flex-1 bg-neutral-50" />
                 </div>
 
                 <div className="flex flex-col gap-y-1">
@@ -75,19 +74,17 @@ export default function SearchPage() {
                       >
                         <div className="flex items-center gap-x-5">
                           <div
-                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all border ${
-                              isActive
-                                ? "bg-red-600 border-red-600 text-white"
-                                : "bg-neutral-50 border-neutral-100 text-neutral-400 group-hover:bg-white"
-                            }`}
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all border ${isActive
+                              ? "bg-red-600 border-red-600 text-white"
+                              : "bg-neutral-50 border-neutral-100 text-neutral-400 group-hover:bg-white"
+                              }`}
                           >
                             <Music2 size={16} />
                           </div>
                           <div>
                             <p
-                              className={`font-semibold text-[15px] leading-tight mb-0.5 tracking-tight transition-colors ${
-                                isActive ? "text-red-600" : "text-neutral-900"
-                              }`}
+                              className={`font-semibold text-[15px] leading-tight mb-0.5 tracking-tight transition-colors ${isActive ? "text-red-600" : "text-neutral-900"
+                                }`}
                             >
                               {song.title}
                             </p>

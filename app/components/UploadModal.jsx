@@ -7,6 +7,7 @@ import { X, UploadCloud } from "lucide-react";
 const UploadModal = ({ isOpen, onClose, onSuccess }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
+  const [category, setCategory] = useState("Worship");
   const [songFile, setSongFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -48,6 +49,7 @@ const UploadModal = ({ isOpen, onClose, onSuccess }) => {
       const { error: dbError } = await supabase.from("songs").insert({
         title: title,
         author: author,
+        category: category,
         song_path: filePath,
       });
 
@@ -114,6 +116,30 @@ const UploadModal = ({ isOpen, onClose, onSuccess }) => {
             />
           </div>
 
+          <div className="flex flex-col gap-y-1">
+            <label className="text-xs font-medium text-neutral-500 ml-1">
+              Category
+            </label>
+            <div className="flex items-center gap-x-2 p-1 bg-neutral-50 border border-neutral-200 rounded-xl">
+              {["Worship", "Praise"].map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setCategory(item)}
+                  className={`
+                    flex-1 py-2 rounded-lg text-sm font-semibold transition-all
+                    ${category === item
+                      ? "bg-white text-red-600 shadow-sm border border-neutral-100"
+                      : "text-neutral-400 hover:text-neutral-600"
+                    }
+                  `}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="p-6 border-2 border-dashed border-neutral-200 rounded-xl bg-neutral-50 hover:border-red-300 transition cursor-pointer relative group">
             <input
               type="file"
@@ -125,11 +151,10 @@ const UploadModal = ({ isOpen, onClose, onSuccess }) => {
             />
             <div className="text-center flex flex-col items-center">
               <UploadCloud
-                className={`mb-2 ${
-                  songFile
-                    ? "text-red-600"
-                    : "text-neutral-300 group-hover:text-red-400"
-                } transition-colors`}
+                className={`mb-2 ${songFile
+                  ? "text-red-600"
+                  : "text-neutral-300 group-hover:text-red-400"
+                  } transition-colors`}
                 size={32}
               />
               <p className="text-sm text-neutral-600 truncate max-w-full px-2">
