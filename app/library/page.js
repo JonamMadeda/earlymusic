@@ -60,11 +60,11 @@ export default function LibraryPage() {
         {isLoading ? (
           <Loader />
         ) : librarySongs.length > 0 ? (
-          <div className="flex flex-col gap-y-10">
+          <div className="flex flex-col gap-y-6">
             {alphabet.map((letter) => (
-              <div key={letter} className="flex flex-col gap-y-4">
-                <div className="flex items-center gap-x-4 border-b border-neutral-50 pb-3 px-2">
-                  <h2 className="text-3xl font-semibold text-red-600 tracking-tight">
+              <div key={letter} className="flex flex-col gap-y-2">
+                <div className="flex items-center gap-x-4 border-b border-neutral-50 pb-2 px-2">
+                  <h2 className="text-3xl font-semibold text-neutral-900 tracking-tight">
                     {letter}
                   </h2>
                 </div>
@@ -92,8 +92,9 @@ export default function LibraryPage() {
               Songs you heart will appear here.
             </p>
           </div>
-        )}
-      </div>
-    </main>
+        )
+        }
+      </div >
+    </main >
   );
 }

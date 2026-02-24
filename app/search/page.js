@@ -52,11 +52,11 @@ export default function SearchPage() {
         {isLoading ? (
           <Loader />
         ) : alphabet.length > 0 ? (
-          <div className="flex flex-col gap-y-12">
+          <div className="flex flex-col gap-y-6">
             {alphabet.map((letter) => (
-              <div key={letter} className="flex flex-col gap-y-4">
-                <div className="flex items-center gap-x-4 border-b border-neutral-50 pb-3 px-2">
-                  <h2 className="text-3xl font-semibold text-red-600 tracking-tight">
+              <div key={letter} className="flex flex-col gap-y-2">
+                <div className="flex items-center gap-x-4 border-b border-neutral-50 pb-2 px-2">
+                  <h2 className="text-3xl font-semibold text-neutral-900 tracking-tight">
                     {letter}
                   </h2>
                 </div>
@@ -70,7 +70,7 @@ export default function SearchPage() {
                         // PASS filteredResults: This sets the playback queue
                         // to ONLY include what you see on the search screen.
                         onClick={() => setActiveSong(song, filteredResults)}
-                        className="bg-white p-4 rounded-2xl flex items-center justify-between group hover:bg-neutral-50 border border-transparent hover:border-neutral-100 transition-all duration-300 cursor-pointer"
+                        className="bg-white p-1.5 md:p-2 rounded-2xl flex items-center justify-between group hover:bg-neutral-50 border border-transparent hover:border-neutral-100 transition-all duration-300 cursor-pointer"
                       >
                         <div className="flex items-center gap-x-5">
                           <div
@@ -117,6 +117,6 @@ export default function SearchPage() {
           </div>
         )}
       </div>
-    </main>
+    </main >
   );
 }

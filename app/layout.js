@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
           <div className="flex flex-col md:flex-row min-h-[90vh] h-screen overflow-hidden">
             <Sidebar />
 
-            <main className="flex-1 bg-neutral-50 md:rounded-2xl md:m-2 md:border border-neutral-200 overflow-y-auto relative flex flex-col">
+            <main className="flex-1 bg-neutral-50 md:rounded-2xl md:m-2 md:border border-neutral-200 overflow-hidden relative flex flex-col">
               <Header />
               <div className="flex-1 overflow-y-auto no-scrollbar pb-32">
                 {children}

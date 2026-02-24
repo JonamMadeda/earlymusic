@@ -25,7 +25,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-[200] bg-white border-b border-neutral-200 px-6 py-5">
+    <header className="sticky top-0 z-[200] bg-white border-b border-t-0 border-neutral-200 px-6 py-5">
       <div className="flex items-center justify-between">
         {/* Title updated to Scarlet color */}
         <div className="flex items-center gap-x-3">
